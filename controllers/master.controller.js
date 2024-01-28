@@ -1,4 +1,6 @@
 import PGDetails from "../models/PGDetails.js";
+import { CreateError } from "../utils/error.js";
+import { CreateSuccess } from "../utils/success.js";
 
 export const createPG = async (req, res, next) => {
   try {
@@ -14,17 +16,19 @@ export const createPG = async (req, res, next) => {
     });
 
     await newPG.save();
-    return res.status(200).send("PG Created Successfully");
+    return next(CreateSuccess(201, "PG Created Successfully"));
   } catch (error) {
-    return res.status(500).send("Internal Server Error");
+    return next(CreateError(500, error.message));
   }
 };
 
 export const getAllPGDetails = async (req, res, next) => {
   try {
     const pgDetails = await PGDetails.find({});
-    return res.status(200).send(pgDetails);
+    return next(
+      CreateSuccess(200, "PG Details Fetched Successfully", pgDetails)
+    );
   } catch (error) {
-    return res.status(500).send("Internal Server Error");
+    return next(CreateError(500, error.message));
   }
 };
