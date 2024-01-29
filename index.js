@@ -2,11 +2,20 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import masterRoute from "./routes/master.js";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 
 app.use("/api/master", masterRoute);
 
